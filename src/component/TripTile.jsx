@@ -41,8 +41,8 @@ function TripTile({startdate,enddate}) {
                 label:'Number of Trips by Lorry Type',
                 data:Object.values(lorryTypeCounts),
                 backgroundColor: [
-                    '#FFDA13' ,
-                    '#158CFC' 
+                    '#158CFC',
+                    '#FFDA13'
                 ],
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1,

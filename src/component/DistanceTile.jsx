@@ -1,5 +1,4 @@
-import React from 'react';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { DashboardDataContext } from './context/DashboardContext';
 import { Bar } from 'react-chartjs-2';
 import {
@@ -17,21 +16,30 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 function DistanceTile({ startdate, enddate }) {
   const { dashboardData } = useContext(DashboardDataContext);
 
+  // Parsing start and end date to Date objects
   const startDate = new Date(startdate);
   const endDate = new Date(enddate);
+
+  console.log('Start Date:', startDate);
+  console.log('End Date:', endDate);
 
   // Filter data by date
   const filteredData = dashboardData.filter((trip) => {
     const tripDate = new Date(trip['Schedule Trip Start Time']);
+    console.log('Trip Date:', tripDate);
     return tripDate >= startDate && tripDate <= endDate;
   });
 
+  // Log filtered data
+  console.log('Filtered Data:', filteredData);
+
   // Group distances by TT number
   const distancesByTT = {};
+
   filteredData.forEach((trip) => {
     const ttNumber = trip['TT Number'];
-    const scheduledDistance = parseFloat(trip['Scheduled Distance']) || 0;
-    const actualDistance = parseFloat(trip['Actual Distance']) || 0;
+    const scheduledDistance = parseFloat(trip['Schedule Trip Distance (KM)']);
+    const actualDistance = parseFloat(trip['Actual Trip Distance (KM)']) ;
 
     if (!distancesByTT[ttNumber]) {
       distancesByTT[ttNumber] = { scheduled: 0, actual: 0 };
@@ -41,26 +49,44 @@ function DistanceTile({ startdate, enddate }) {
     distancesByTT[ttNumber].actual += actualDistance;
   });
 
+  // Log grouped distances by TT
+  console.log('Distances by TT:', distancesByTT);
+
   // Prepare data for the chart
   const labels = Object.keys(distancesByTT);
   const scheduledDistances = labels.map((tt) => distancesByTT[tt].scheduled);
   const actualDistances = labels.map((tt) => distancesByTT[tt].actual);
 
-  const chartData = {
-    labels: labels,
+  // Log chart data
+  console.log('Chart Data:', {
+    labels,
     datasets: [
       {
         label: 'Scheduled Distance (km)',
         data: scheduledDistances,
-        backgroundColor: 'rgba(75, 192, 192, 0.5)', // Light teal
-        borderColor: 'rgba(75, 192, 192, 1)',       // Dark teal
+      },
+      {
+        label: 'Actual Distance (km)',
+        data: actualDistances,
+      },
+    ],
+  });
+
+  const chartData = {
+    labels,
+    datasets: [
+      {
+        label: 'Scheduled Distance (km)',
+        data: scheduledDistances,
+        backgroundColor: '#158CFC', // Light blue
+        borderColor: 'rgba(54, 162, 235, 1)', // Dark blue
         borderWidth: 1,
       },
       {
         label: 'Actual Distance (km)',
         data: actualDistances,
-        backgroundColor: 'rgba(255, 99, 132, 0.5)', // Light red
-        borderColor: 'rgba(255, 99, 132, 1)',       // Dark red
+        backgroundColor: '#FFDA13', // Light red
+        borderColor: 'rgba(255, 99, 132, 1)', // Dark red
         borderWidth: 1,
       },
     ],
@@ -69,12 +95,13 @@ function DistanceTile({ startdate, enddate }) {
   const chartOptions = {
     indexAxis: 'y', // Horizontal bar chart
     responsive: true,
+    maintainAspectRatio: false, // Allow chart resizing
     plugins: {
       legend: {
-        position: 'top', // Legend on top
+        position: 'top',
       },
       tooltip: {
-        enabled: true, // Show tooltips on hover
+        enabled: true,
       },
     },
     scales: {
@@ -84,7 +111,7 @@ function DistanceTile({ startdate, enddate }) {
           text: 'Distance (km)',
         },
         ticks: {
-          beginAtZero: true, // Ensure scale starts at zero
+          beginAtZero: true,
         },
       },
       y: {
@@ -97,10 +124,12 @@ function DistanceTile({ startdate, enddate }) {
   };
 
   return (
-    <div className="container">
+    <div className="container" style={{ maxHeight: '400px', overflowY: 'auto' }}>
       <h5>Scheduled vs Actual Distance by TT Number</h5>
       {labels.length > 0 ? (
-        <Bar data={chartData} options={chartOptions} />
+        <div style={{ height: `${labels.length * 50}px` }}>
+          <Bar data={chartData} options={chartOptions} />
+        </div>
       ) : (
         <p>No data available for the selected date range.</p>
       )}
@@ -109,4 +138,3 @@ function DistanceTile({ startdate, enddate }) {
 }
 
 export default DistanceTile;
-
