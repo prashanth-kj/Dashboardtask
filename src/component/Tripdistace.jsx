@@ -1,29 +1,3 @@
-// import React, { useContext } from "react";
-// import { DashboardDataContext } from "./context/DashboardContext";
-
-// function Tripdistace({startdate,enddate}) {
-//     const { dashboardData } = useContext(DashboardDataContext);
-    
-//       // Convert the start and end dates to Date objects
-//       const startDate = new Date(startdate);
-//       const endDate = new Date(enddate);
-    
-//       // Filter data based on the date range
-//       const filteredData = dashboardData.filter((trip) => {
-//         const tripDate = new Date(trip["Schedule Trip Start Time"]);
-//         return tripDate >= startDate && tripDate <= endDate;
-//       });
-      
-
-      
-
-//   return (
-//     <div>Tripdistace</div>
-//   )
-// }
-
-// export default Tripdistace
-
 import React, { useContext } from "react";
 import { Line } from "react-chartjs-2";
 import {
@@ -96,9 +70,9 @@ function TripDistance({ startdate, enddate }) {
         label: "Scheduled Trip Distance (KM)",
         data: scheduledDistances,
         borderColor: "#428ED5",
-        backgroundColor: "#FFDA13", // Blue fill
+        backgroundColor: "#FFDA13",
         fill: true,
-        tension: 0.4, // Smooth curve
+        tension: 0.4, 
       },
       {
         label: "Actual Trip Distance (KM)",
@@ -106,7 +80,7 @@ function TripDistance({ startdate, enddate }) {
         borderColor: "#158CFC", 
         backgroundColor: "#158CFC", 
         fill: true,
-        tension: 0.4, // Smooth curve
+        tension: 0.4, 
       },
     ],
   };
