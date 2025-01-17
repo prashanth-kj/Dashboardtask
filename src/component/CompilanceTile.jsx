@@ -76,7 +76,7 @@ function CompilanceTile({ startdate, enddate }) {
   };
 
   return (
-    <div className="container">
+    <div className="container shadow p-2">
       <h5>Compliance Violations Percentage</h5>
       {totalTrips > 0 ? (
         <Doughnut data={chartData} options={chartOptions} />

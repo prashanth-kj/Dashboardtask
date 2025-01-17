@@ -124,7 +124,7 @@ function DistanceTile({ startdate, enddate }) {
   };
 
   return (
-    <div className="container" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+    <div className="container shadow p-3" style={{ maxHeight: '400px', overflowY: 'auto' }}>
       <h5>Scheduled vs Actual Distance by TT Number</h5>
       {labels.length > 0 ? (
         <div style={{ height: `${labels.length * 50}px` }}>
